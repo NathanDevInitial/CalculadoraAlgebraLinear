@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>Calculadora Álgebra Linear</title>
+</head>
+<body>
+    <ul>
+        <li><a href="index.html">Página Inicial</a></li>
+        <li><a href="calculoGeradorU.html">Calculo Gerador de U</a></li>
+    </ul>
+
+    <div class="container">
+        <h2>Calculadora de Gerador de U</h2>
+        <form id="formulario_calculo">
+            <label for="vetor_u">Vetor U:</label>
+            <input type="text" id="vetor_u" placeholder="Digite o vetor U (ex: 1,2,3)">
+            
+            <label for="vetor_v1">Vetor V1:</label>
+            <input type="text" id="vetor_v1" placeholder="Digite o vetor V1 (ex: 4,5,6)">
+            
+            <label for="vetor_v2">Vetor V2:</label>
+            <input type="text" id="vetor_v2" placeholder="Digite o vetor V2 (ex: 7,8,9)">
+            
+            <label for="vetor_v3">Vetor V3:</label>
+            <input type="text" id="vetor_v3" placeholder="Digite o vetor V3 (ex: 10,11,12)">
+            
+            <button type="button" onclick="verificarSistemaGerador()">Verificar Sistema Gerador</button>
+        </form>
+
+        <div id="mensagem"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}">
+
+    function verificarSistemaGerador() {
+        // Obtenha os valores dos vetores do usuário
+        var u = $('#vetor_u').val();
+        var conjuntoVetores = [$('#vetor_v1').val(), $('#vetor_v2').val(), $('#vetor_v3').val()];
+
+        // Chame a função Python passando os valores diretamente
+        $.ajax({
+            type: 'POST',
+            url: '/verificar_sistema_gerador',
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({ 'U': u, 'conjunto_vetores': conjuntoVetores }),
+            success: function (data) {
+                // Manipule os resultados retornados pelo servidor
+                mostrarMensagem(data.mensagem);
+                alert('É sistema gerador? ' + (data.resultado ? 'Sim' : 'Não'));
+            },
+            error: function (error) {
+                alert('Erro na requisição AJAX: ' + error.responseText);
+            }
+        });
+    }
+    
+    </script>
+</body>
+</html>

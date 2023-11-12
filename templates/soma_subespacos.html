@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>Soma de SubEspacos</title>
+</head>
+<body>
+    <div class="container">
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('index') }}">Página Inicial</a></li>
+            <li><a href="soma_subespacos.html">Soma dos Subespaços</a></li>
+            <!-- Adicione mais links conforme necessário -->
+        </ul>
+    </nav>
+
+        <div class="content">
+        <!-- Exemplo de botão para acionar o cálculo da soma dos subespaços -->
+        
+            <button onclick="calcularSomaSubespacos()">Calcular Soma dos Subespaços</button>
+
+            <!-- Campos de entrada para os vetores relevantes -->
+            <label for="vetor_y">Valor de y:</label>
+            <input type="text" id="vetor_y">
+            <label for="vetor_x">Valor de x:</label>
+            <input type="text" id="vetor_x">
+            <label for="vetor_z">Valor de z:</label>
+            <input type="text" id="vetor_z">
+
+        </div>
+
+    </div>
+    
+
+    <script src="{{ url_for('static', filename='script.js') }}">
+
+        function calcularSomaSubespacos() {
+            // Obter os valores dos campos de entrada
+            var y = $('#vetor_y').val();
+            var x = $('#vetor_x').val();
+            var z = $('#vetor_z').val();
+
+            // Fazer a requisição AJAX para o servidor Flask
+            $.ajax({
+                type: 'POST',
+                url: '/soma_subespacos',
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify({ 'y': y, 'x': x, 'z': z }),
+                success: function (data) {
+                    alert(data.soma_subespacos);
+                },
+                error: function (error) {
+                    alert('Erro na requisição AJAX: ' + error.responseText);
+                }
+            });
+        }
+
+    
+    </script>
+</body>
+</html>
